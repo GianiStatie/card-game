@@ -1,6 +1,6 @@
 extends Node2D
 
-const UnitScene = preload("res://src/player/Player.tscn")
+const UnitScene = preload("res://src/units/Unit.tscn")
 
 @onready var map = $Map
 
@@ -8,11 +8,6 @@ const UnitScene = preload("res://src/player/Player.tscn")
 @onready var select_effect = $CanvasLayer/SelectedEffect
 
 func _input(event):
-	if event.is_action_pressed("LeftMouseClick"):
-		if GameState.is_unit_selected:
-			GameState.selected_unit.unselect()
-			GameState.is_unit_selected = false
-
 	if event is InputEventMouse:
 		if GameState.is_holding_card:
 			var mouse_global_position = get_global_mouse_position()
@@ -51,7 +46,6 @@ func _on_card_container_card_was_picked_up(_card):
 
 func _on_card_container_card_was_released(card):
 	_handle_card_release(card)
-	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	arrow_effect.visible = false
 	select_effect.visible = false
