@@ -192,11 +192,13 @@ position = Vector2(224, 160)
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="UnitPlaceEffect" parent="CanvasLayer" instance=ExtResource("6_gksfp")]
+visible = false
 
 [node name="SelectedEffect" parent="CanvasLayer" instance=ExtResource("7_qvcjj")]
+visible = false
 z_index = -1
 
-[node name="Container" type="Container" parent="CanvasLayer"]
+[node name="CardContainer" type="Container" parent="CanvasLayer"]
 custom_minimum_size = Vector2(0, 200)
 anchors_preset = 12
 anchor_top = 1.0
@@ -225,4 +227,8 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "Draw Card"
 
-[connection signal="pressed" from="CanvasLayer/Button" to="CanvasLayer/Container" method="_on_button_pressed"]
+[connection signal="card_was_picked_up" from="CanvasLayer/CardContainer" to="." method="_on_card_container_card_was_picked_up"]
+[connection signal="card_was_picked_up" from="CanvasLayer/CardContainer" to="Map" method="_on_card_container_card_was_picked_up"]
+[connection signal="card_was_released" from="CanvasLayer/CardContainer" to="." method="_on_card_container_card_was_released"]
+[connection signal="card_was_released" from="CanvasLayer/CardContainer" to="Map" method="_on_card_container_card_was_released"]
+[connection signal="pressed" from="CanvasLayer/Button" to="CanvasLayer/CardContainer" method="_on_button_pressed"]

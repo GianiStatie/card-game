@@ -6,10 +6,17 @@ const CardScene = preload("res://card.tscn")
 @export var curve_y_end = -883: set = _set_curve_y_end, get = _get_curve_y_end
 @export var curve_margin = -660: set = _set_curve_margin, get = _get_curve_margin
 @export_range(-1, 1, 0.01) var card_overlap = 0.18: set = _set_card_overlap, get = _get_card_overlap
-var card_size = Vector2.ZERO
 
 @onready var screen_size = get_viewport().size
 
+var card_size = Vector2.ZERO
+
+signal card_was_picked_up(card)
+signal card_was_released(card)
+
+
+func _ready():
+	connect("child_order_changed", _on_child_order_changed)
 
 func _quadratic_bezier(p0: Vector2, p1: Vector2, p2: Vector2, t: float):
 	var q0 = p0.lerp(p1, t)
@@ -20,11 +27,11 @@ func _quadratic_bezier(p0: Vector2, p1: Vector2, p2: Vector2, t: float):
 func _on_button_pressed():
 	var card = CardScene.instantiate()
 	add_child(card)
+	card.connect("card_was_picked_up", _on_Card_was_picked_up)
+	card.connect("card_was_released", _on_Card_was_released)
 	
 	if card_size == Vector2.ZERO:
 		card_size = card.size
-	
-	reorder_cards_in_hand()
 
 func reorder_cards_in_hand():
 	var center_x = screen_size.x / 2 - card_size.x / 2
@@ -50,6 +57,19 @@ func reorder_cards_in_hand():
 		var bez_rot = deg_to_rad(45) * centered_t
 		
 		child.set_transform(bez_pos, bez_rot)
+
+func _on_Card_was_picked_up(card):
+	GameState.is_holding_card = true
+	GameState.held_card = card
+	emit_signal("card_was_picked_up", card)
+
+func _on_Card_was_released(card):
+	GameState.is_holding_card = false
+	GameState.held_card = null
+	emit_signal("card_was_released", card)
+
+func _on_child_order_changed():
+	reorder_cards_in_hand()
 
 func _set_curve_y_start(value):
 	curve_y_start = value

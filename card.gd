@@ -20,22 +20,21 @@ var new_scale = Vector2.ONE * 1.35
 var new_z_index = 11
 
 var is_hovered = false
+var is_selected = false
 var follow_mouse = false
 
-signal card_being_held(card)
-signal card_released(card)
+signal card_was_picked_up(card)
+signal card_was_released(card)
 
 func _input(event):
 	if event.is_action_pressed("LeftMouseClick") and is_hovered:
-		GameState.is_holding_card = true
-		GameState.held_card = self
+		is_selected = true
 		_on_mouse_exited() # check type of card
-		emit_signal("card_being_held", self)
-	if event.is_action_released("LeftMouseClick"):
-		GameState.is_holding_card = false
-		GameState.held_card = null
+		emit_signal("card_was_picked_up", self)
+	if event.is_action_released("LeftMouseClick") and is_selected:
+		is_selected = false
 		_on_mouse_exited()
-		emit_signal("card_released", self)
+		emit_signal("card_was_released", self)
 
 func _process(delta):
 	var card_move_speed = default_move_speed
