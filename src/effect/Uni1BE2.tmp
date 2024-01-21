@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://di77xpueiuvjv"]
+
+[ext_resource type="Script" path="res://src/effect/UnitPlaceEffect.gd" id="1_75hxo"]
+[ext_resource type="Shader" path="res://src/shaders/placement_arrow.gdshader" id="1_kyu75"]
+[ext_resource type="Texture2D" uid="uid://4qhf6c2tv57a" path="res://assets/custom/arrow_body.png" id="1_qpq8j"]
+[ext_resource type="Texture2D" uid="uid://df37nvuy4juhe" path="res://assets/custom/arrow_head.png" id="4_03i7l"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ickou"]
+shader = ExtResource("1_kyu75")
+shader_parameter/scrolling_speed = 1.0
+
+[node name="UnitPlaceEffect" type="Line2D"]
+z_index = 1
+texture_repeat = 2
+material = SubResource("ShaderMaterial_ickou")
+points = PackedVector2Array(0, 0, 0, -128)
+width = 32.0
+texture = ExtResource("1_qpq8j")
+texture_mode = 1
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("1_75hxo")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -147)
+scale = Vector2(1.25, 1.25)
+texture = ExtResource("4_03i7l")
