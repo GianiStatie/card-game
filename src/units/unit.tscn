@@ -97,4 +97,6 @@ libraries = {
 }
 autoplay = "Idle"
 
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+
 [connection signal="input_event" from="SelectionArea" to="." method="_on_selection_area_input_event"]
