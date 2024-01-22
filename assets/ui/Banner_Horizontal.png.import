@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://df37nvuy4juhe"
-path="res://.godot/imported/arrow_head.png-4803dc1eba8739de526bc182d8b44cad.ctex"
+uid="uid://cxrcd10g3f5ug"
+path="res://.godot/imported/Banner_Horizontal.png-3647f3c31527d45cc455f3dd088dfadd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/arrows/arrow_head.png"
-dest_files=["res://.godot/imported/arrow_head.png-4803dc1eba8739de526bc182d8b44cad.ctex"]
+source_file="res://assets/ui/Banner_Horizontal.png"
+dest_files=["res://.godot/imported/Banner_Horizontal.png-3647f3c31527d45cc455f3dd088dfadd.ctex"]
 
 [params]
 

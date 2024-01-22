@@ -1,10 +1,68 @@
-[gd_scene load_steps=2 format=3 uid="uid://cdoewpbifo40y"]
+[gd_scene load_steps=7 format=3 uid="uid://cdoewpbifo40y"]
 
 [ext_resource type="Texture2D" uid="uid://cxjp1e0dn0w0n" path="res://assets/units/Torch_Blue.png" id="1_uxhu7"]
+[ext_resource type="Script" path="res://src/units/enemy.gd" id="1_ywv4m"]
 
-[node name="Enemy" type="Node2D"]
+[sub_resource type="Animation" id="Animation_ng24x"]
+resource_name = "Idle"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_t2tkt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_snc23"]
+_data = {
+"Idle": SubResource("Animation_ng24x"),
+"RESET": SubResource("Animation_t2tkt")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wo8px"]
+size = Vector2(48, 48)
+
+[node name="Enemy" type="Node2D" groups=["Enemy"]]
+script = ExtResource("1_ywv4m")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_uxhu7")
 hframes = 7
 vframes = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_snc23")
+}
+autoplay = "Idle"
+
+[node name="SelectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SelectionArea"]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_wo8px")
+
+[connection signal="mouse_entered" from="SelectionArea" to="." method="_on_selection_area_mouse_entered"]
+[connection signal="mouse_exited" from="SelectionArea" to="." method="_on_selection_area_mouse_exited"]

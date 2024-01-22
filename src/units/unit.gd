@@ -12,6 +12,13 @@ signal was_deselected(unit)
 signal want_to_move(unit, target_global_position)
 
 var move_directions = [
+	Vector2i.UP,
+	Vector2i.DOWN,
+	Vector2i.LEFT,
+	Vector2i.RIGHT,
+]
+
+var attack_directions = [
 	Vector2i(1, 1),
 	Vector2i(-1, 1),
 	Vector2i(-1, -1),
@@ -58,7 +65,6 @@ func move_to(target_global_position):
 		sprite.scale.x = 1
 	
 	animation_player.play("Move")
-	unselect()
 
 func _on_selection_area_input_event(_viewport, event, _shape_idx):
 	if event.is_action_pressed("LeftMouseClick"):

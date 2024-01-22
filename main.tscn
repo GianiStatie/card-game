@@ -1,11 +1,12 @@
-[gd_scene load_steps=13 format=3 uid="uid://blik5to2oho03"]
+[gd_scene load_steps=14 format=3 uid="uid://blik5to2oho03"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_7hgu7"]
 [ext_resource type="Script" path="res://CardContainer.gd" id="1_evodb"]
-[ext_resource type="Texture2D" uid="uid://bu4yqjwck8txe" path="res://assets/ui/board/Tilemap_Elevation.png" id="1_vklg5"]
-[ext_resource type="Texture2D" uid="uid://kgmmuo8cimhw" path="res://assets/ui/board/Tilemap_Flat.png" id="2_1p78n"]
+[ext_resource type="Texture2D" uid="uid://bu4yqjwck8txe" path="res://assets/board/Tilemap_Elevation.png" id="1_vklg5"]
+[ext_resource type="Texture2D" uid="uid://kgmmuo8cimhw" path="res://assets/board/Tilemap_Flat.png" id="2_1p78n"]
 [ext_resource type="Script" path="res://Map.gd" id="2_sy7r7"]
-[ext_resource type="Texture2D" uid="uid://bywuvi6mtw3mj" path="res://assets/ui/board/shadow_64x64.png" id="3_n7xqg"]
+[ext_resource type="Texture2D" uid="uid://bywuvi6mtw3mj" path="res://assets/board/shadow_64x64.png" id="3_n7xqg"]
+[ext_resource type="PackedScene" uid="uid://cdoewpbifo40y" path="res://src/units/enemy.tscn" id="6_87ddg"]
 [ext_resource type="PackedScene" uid="uid://di77xpueiuvjv" path="res://src/effect/UnitPlaceEffect.tscn" id="6_gksfp"]
 [ext_resource type="PackedScene" uid="uid://c885nsyjipnty" path="res://src/effect/SelectedEffect.tscn" id="7_qvcjj"]
 
@@ -271,8 +272,11 @@ texture_region_size = Vector2i(64, 64)
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mdrsk"]
 texture = ExtResource("3_n7xqg")
 texture_region_size = Vector2i(64, 64)
+0:0/next_alternative_id = 2
 0:0/0 = 0
 0:0/0/modulate = Color(0, 100, 1, 1)
+0:0/1 = 1
+0:0/1/modulate = Color(100, 0, 0, 1)
 
 [sub_resource type="TileSet" id="TileSet_uxh8n"]
 tile_size = Vector2i(64, 64)
@@ -309,6 +313,9 @@ layer_1/tile_data = PackedInt32Array()
 layer_2/name = "Effects"
 layer_2/tile_data = PackedInt32Array()
 script = ExtResource("2_sy7r7")
+
+[node name="Enemy" parent="Map" instance=ExtResource("6_87ddg")]
+position = Vector2(352, 152)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

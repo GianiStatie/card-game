@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4qhf6c2tv57a"
-path="res://.godot/imported/arrow_body.png-4e87a23de878ade5c8cffb9d0701dd24.ctex"
+uid="uid://kgmmuo8cimhw"
+path="res://.godot/imported/Tilemap_Flat.png-de968e9926c6a58e90122b89b6ed7b6b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/arrows/arrow_body.png"
-dest_files=["res://.godot/imported/arrow_body.png-4e87a23de878ade5c8cffb9d0701dd24.ctex"]
+source_file="res://assets/board/Tilemap_Flat.png"
+dest_files=["res://.godot/imported/Tilemap_Flat.png-de968e9926c6a58e90122b89b6ed7b6b.ctex"]
 
 [params]
 
