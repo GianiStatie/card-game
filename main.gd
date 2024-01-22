@@ -1,6 +1,6 @@
 extends Node2D
 
-const UnitScene = preload("res://src/units/Unit.tscn")
+const UnitScene = preload("res://src/units/unit.tscn")
 
 @onready var map = $Map
 

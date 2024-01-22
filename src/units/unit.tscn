@@ -1,8 +1,16 @@
-[gd_scene load_steps=9 format=3 uid="uid://c7olrd717040l"]
+[gd_scene load_steps=11 format=3 uid="uid://c7olrd717040l"]
 
 [ext_resource type="Script" path="res://src/units/unit.gd" id="1_hxa3n"]
 [ext_resource type="PackedScene" uid="uid://c885nsyjipnty" path="res://src/effect/SelectedEffect.tscn" id="2_m7i68"]
+[ext_resource type="Shader" path="res://src/shaders/color_swap.gdshader" id="3_ob0dq"]
 [ext_resource type="Texture2D" uid="uid://yrg30cji4scr" path="res://assets/units/Pawn_Blue.png" id="3_x1s6x"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bqc42"]
+shader = ExtResource("3_ob0dq")
+shader_parameter/old_main_color = null
+shader_parameter/old_shadow_color = null
+shader_parameter/new_main_color = null
+shader_parameter/new_shadow_color = null
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_82fs8"]
 size = Vector2(48, 48)
@@ -24,21 +32,6 @@ tracks/0/keys = {
 "values": [0, 1, 2, 3, 4, 5]
 }
 
-[sub_resource type="Animation" id="Animation_ai4nu"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-
 [sub_resource type="Animation" id="Animation_vhxca"]
 resource_name = "Move"
 length = 0.6
@@ -56,6 +49,21 @@ tracks/0/keys = {
 "values": [6, 7, 8, 9, 10, 11]
 }
 
+[sub_resource type="Animation" id="Animation_ai4nu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_vmnk4"]
 _data = {
 "Idle": SubResource("Animation_bl8tv"),
@@ -71,6 +79,7 @@ visible = false
 position = Vector2(0, 8)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_bqc42")
 position = Vector2(0, -8)
 texture = ExtResource("3_x1s6x")
 hframes = 6

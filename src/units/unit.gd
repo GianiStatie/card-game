@@ -18,6 +18,16 @@ var move_directions = [
 	Vector2i(1, -1),
 ]
 
+
+func _ready():
+	var source_color = Constants.DEFAULT_PALETTE
+	var target_color = Constants.PALETTS["yellow"]
+	sprite.material.set_shader_parameter("old_main_color", source_color["old_main_color"])
+	sprite.material.set_shader_parameter("old_shadow_color", source_color["old_shadow_color"])
+	sprite.material.set_shader_parameter("new_main_color", target_color["new_main_color"])
+	sprite.material.set_shader_parameter("new_shadow_color", target_color["new_shadow_color"])
+
+
 func _input(event):
 	if event.is_action_pressed("LeftMouseClick"):
 		if GameState.is_unit_selected and GameState.selected_unit == self:
@@ -50,7 +60,7 @@ func move_to(target_global_position):
 	animation_player.play("Move")
 	unselect()
 
-func _on_selection_area_input_event(viewport, event, shape_idx):
+func _on_selection_area_input_event(_viewport, event, _shape_idx):
 	if event.is_action_pressed("LeftMouseClick"):
 		GameState.is_unit_selected = true
 		GameState.selected_unit = self

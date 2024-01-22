@@ -91,7 +91,7 @@ func _on_card_container_card_was_picked_up(_card):
 			highlighted_cells.append(interactable_cell["cell"])
 	highlight_cells(highlighted_cells)
 
-func _on_card_container_card_was_released(card):
+func _on_card_container_card_was_released(_card):
 	unhilight_cells(highlighted_cells)
 	highlighted_cells = []
 
@@ -100,7 +100,7 @@ func _on_unit_was_selected(unit):
 		var unit_cell = local_to_map(unit.position)
 		for direction in unit.move_directions:
 			var move_cell = unit_cell + direction
-			if not is_occupied_cell(move_cell):
+			if is_valid_cell(move_cell) and not is_occupied_cell(move_cell):
 				highlighted_cells.append(move_cell)
 		highlight_cells(highlighted_cells)
 

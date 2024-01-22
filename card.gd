@@ -48,15 +48,15 @@ func _process(delta):
 	
 	position = position.move_toward(new_position, card_move_speed * delta)
 	scale = scale.move_toward(new_scale, card_scale_speed * delta)
-	rotation = move_toward(rotation, new_rotation, hover_scale_speed * delta)
+	rotation = move_toward(rotation, new_rotation, card_rotate_speed * delta)
 
 func move_card_to_mouse():
 	new_position = _get_mouse_position()
 
-func set_transform(new_position, new_rotation=0, new_z_index=0):
-	return_position = new_position
-	return_rotation = new_rotation
-	return_z_index = new_z_index
+func set_transform(target_position, target_rotation=0, target_z_index=0):
+	return_position = target_position
+	return_rotation = target_rotation
+	return_z_index = target_z_index
 	_on_mouse_exited()
 
 func get_global_center():

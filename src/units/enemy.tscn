@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cdoewpbifo40y"]
+
+[ext_resource type="Texture2D" uid="uid://cxjp1e0dn0w0n" path="res://assets/units/Torch_Blue.png" id="1_uxhu7"]
+
+[node name="Enemy" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_uxhu7")
+hframes = 7
+vframes = 5
