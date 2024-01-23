@@ -30,7 +30,7 @@ func _on_card_container_card_was_picked_up(_card):
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	arrow_effect.visible = true
 
-func _on_card_container_card_was_released(card):
+func _on_card_container_card_was_released(_card):
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	arrow_effect.visible = false
 	select_effect.visible = false

@@ -8,6 +8,12 @@ var terrain_layer = 0
 var foliage_layer = 1
 var effects_layer = 2
 
+var highlight_colors = {
+	"move": "green",
+	"attack": "red"
+}
+
+
 func _ready():
 	var viewport_center = get_viewport().size / 2
 	viewport_center -= (Vector2i(map_size) * tile_set.tile_size) / 2
@@ -47,12 +53,9 @@ func is_valid_cell(cell):
 func is_highlighted_cell(cell):
 	return cell in highlighted_cells
 
-func highlight_cells(cells, color="green"):
+func highlight_cells(cells, action_type="move"):
 	var alternative_tile
-	if color == "green":
-		alternative_tile = 0
-	elif color == "red":
-		alternative_tile = 1
+	alternative_tile = highlight_colors.values().find(highlight_colors[action_type])
 	
 	for cell in cells:
 		highlighted_cells.append(cell)
@@ -60,7 +63,12 @@ func highlight_cells(cells, color="green"):
 
 func unhilight_cells(cells):
 	for cell in cells:
+		highlighted_cells.erase(cell)
 		erase_cell(effects_layer, cell)
 
 func unhilight_all_cells():
 	unhilight_cells(interactable_cells)
+
+func get_highlight_type(cell):
+	var action_index = get_cell_alternative_tile(effects_layer, cell)
+	return highlight_colors.keys()[action_index]

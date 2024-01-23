@@ -45,10 +45,10 @@ _data = {
 size = Vector2(64, 64)
 
 [node name="Enemy" type="Node2D" groups=["Enemy"]]
-position = Vector2(2.08165e-12, -16)
 script = ExtResource("1_ywv4m")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(2.08165e-12, -8)
 texture = ExtResource("1_uxhu7")
 hframes = 7
 vframes = 5
@@ -60,6 +60,7 @@ libraries = {
 autoplay = "Idle"
 
 [node name="SelectionArea" type="Area2D" parent="."]
+position = Vector2(2.08165e-12, -8)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SelectionArea"]
 shape = SubResource("RectangleShape2D_wo8px")

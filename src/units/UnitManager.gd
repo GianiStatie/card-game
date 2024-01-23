@@ -21,9 +21,12 @@ func set_cell_occupied(cell, object):
 func set_cell_free(cell):
 	occupied_cells.erase(str(cell))
 
-func is_occupied_cell(cell):
+func get_unit_at_cell(cell):
 	var fetched_cell = occupied_cells.get(str(cell), {})
-	return fetched_cell.get("object", null) != null
+	return fetched_cell.get("object", null)
+
+func is_occupied_cell(cell):
+	return get_unit_at_cell(cell) != null
 
 func highlight_unit_move_cells(unit):
 	var to_be_highlighted = []
@@ -32,16 +35,18 @@ func highlight_unit_move_cells(unit):
 		var move_cell = unit_cell + direction
 		if map.is_valid_cell(move_cell) and not is_occupied_cell(move_cell):
 			to_be_highlighted.append(move_cell)
-	map.highlight_cells(to_be_highlighted, "green")
+	map.highlight_cells(to_be_highlighted, "move")
 
 func highlight_unit_attack_cells(unit):
 	var to_be_highlighted = []
 	var unit_cell = map.global_to_map(unit.global_position)
 	for direction in unit.attack_directions:
-		var move_cell = unit_cell + direction
-		if map.is_valid_cell(move_cell) and is_occupied_cell(move_cell):
-			to_be_highlighted.append(move_cell)
-	map.highlight_cells(to_be_highlighted, "red")
+		var attack_cell = unit_cell + direction
+		if map.is_valid_cell(attack_cell) and is_occupied_cell(attack_cell):
+			var unit_at_cell = get_unit_at_cell(attack_cell)
+			if unit_at_cell.is_in_group("Enemy"):
+				to_be_highlighted.append(attack_cell)
+	map.highlight_cells(to_be_highlighted, "attack")
 
 func _on_unit_was_selected(unit):
 	if unit.is_in_group("Unit"):
@@ -51,13 +56,17 @@ func _on_unit_was_selected(unit):
 func _on_unit_was_unselected(_unit):
 	map.unhilight_all_cells()
 
-func _on_unit_want_to_move(unit, target_global_position):
+func _on_unit_interact_with(unit, target_global_position):
 	var target_cell = map.global_to_map(target_global_position)
 	if map.is_valid_cell(target_cell) and map.is_highlighted_cell(target_cell):
-		var unit_cell = map.global_to_map(unit.global_position)
-		set_cell_free(unit_cell)
-		set_cell_occupied(target_cell, unit)
-		unit.move_to(map.map_to_global(target_cell))
+		var action_type = map.get_highlight_type(target_cell)
+		if action_type == "move":
+			var unit_cell = map.global_to_map(unit.global_position)
+			set_cell_free(unit_cell)
+			set_cell_occupied(target_cell, unit)
+			unit.move_to(map.map_to_global(target_cell))
+		elif action_type == "attack":
+			unit.attack_at(target_global_position)
 	unit.unselect()
 
 func _on_child_entered_tree(child):
@@ -65,7 +74,7 @@ func _on_child_entered_tree(child):
 	set_cell_occupied(child_cell, child)
 	child.connect("was_selected", _on_unit_was_selected)
 	child.connect("was_deselected", _on_unit_was_unselected)
-	child.connect("want_to_move", _on_unit_want_to_move)
+	child.connect("interact_with", _on_unit_interact_with)
 
 func _on_card_container_card_was_released(card):
 	var mouse_global_position = get_global_mouse_position()
