@@ -1,8 +1,7 @@
 extends TileMap
 
 var map_size = Vector2(8, 5)
-var interactable_cells = {}
-
+var interactable_cells = []
 var highlighted_cells = []
 
 var terrain_layer = 0
@@ -17,8 +16,8 @@ func _ready():
 	# set background of map
 	for col in map_size.x:
 		for row in map_size.y:
-			var map_cell = Vector2(col, row)
-			_set_interactable_cell(map_cell, null)
+			var map_cell = Vector2i(col, row)
+			interactable_cells.append(map_cell)
 			BetterTerrain.set_cell(self, terrain_layer, map_cell, 0)
 			BetterTerrain.update_terrain_cell(self, terrain_layer, map_cell)
 	
@@ -31,24 +30,8 @@ func _ready():
 	for col in map_size.x:
 		for row in map_size.y:
 			var map_cell = Vector2(col, row)
-			_set_interactable_cell(map_cell, null)
 			BetterTerrain.set_cell(self, foliage_layer, map_cell, 2)
 			BetterTerrain.update_terrain_cell(self, foliage_layer, map_cell)
-	
-	# set occupied cells
-	for child in get_children():
-		child.connect("hover_start", _on_unit_hover_started)
-		child.connect("hover_end", _on_unit_hover_ended)
-		var child_cell = local_to_map(child.position)
-		_set_interactable_cell(child_cell, child)
-	
-	connect("child_entered_tree", _on_child_entered_tree)
-
-func _set_interactable_cell(cell, object):
-	interactable_cells[str(cell)] = {"object": object, "cell": cell}
-
-func _get_interactable_cell(cell):
-	return interactable_cells.get(str(cell), null)
 
 func global_to_map(input_global_position):
 	var mouse_map_postion = to_local(input_global_position)
@@ -59,15 +42,10 @@ func map_to_global(cell):
 	return to_global(hovered_cell_map_position)
 
 func is_valid_cell(cell):
-	var cell_meta = _get_interactable_cell(cell)
-	return cell_meta != null
+	return cell in interactable_cells
 
-func is_occupied_cell(cell):
-	var cell_meta = _get_interactable_cell(cell)
-	return cell_meta["object"] != null
-
-func is_valid_placement(cell):
-	return is_valid_cell(cell) and not is_occupied_cell(cell)
+func is_highlighted_cell(cell):
+	return cell in highlighted_cells
 
 func highlight_cells(cells, color="green"):
 	var alternative_tile
@@ -77,6 +55,7 @@ func highlight_cells(cells, color="green"):
 		alternative_tile = 1
 	
 	for cell in cells:
+		highlighted_cells.append(cell)
 		set_cell(effects_layer, cell, 2, Vector2.ZERO, alternative_tile)
 
 func unhilight_cells(cells):
@@ -84,76 +63,4 @@ func unhilight_cells(cells):
 		erase_cell(effects_layer, cell)
 
 func unhilight_all_cells():
-	var cells = []
-	for cell in interactable_cells.keys():
-		var interactable_cell = _get_interactable_cell(cell)
-		cells.append(interactable_cell["cell"])
-	unhilight_cells(cells)
-
-func highlight_unit_move_cells(unit):
-	var unit_cell = local_to_map(unit.position)
-	for direction in unit.move_directions:
-		var move_cell = unit_cell + direction
-		if is_valid_cell(move_cell) and not is_occupied_cell(move_cell):
-			highlighted_cells.append(move_cell)
-	highlight_cells(highlighted_cells)
-
-func highlight_unit_attack_cells(unit):
-	var unit_cell = local_to_map(unit.position)
-	for direction in unit.attack_directions:
-		var move_cell = unit_cell + direction
-		if is_valid_cell(move_cell):
-			highlighted_cells.append(move_cell)
-	highlight_cells(highlighted_cells, "red")
-
-func _on_card_container_card_was_picked_up(_card):
-	highlighted_cells = []
-	for cell in interactable_cells.keys():
-		var interactable_cell = _get_interactable_cell(cell)
-		if interactable_cell["object"] == null:
-			highlighted_cells.append(interactable_cell["cell"])
-	highlight_cells(highlighted_cells)
-
-func _on_card_container_card_was_released(_card):
-	unhilight_cells(highlighted_cells)
-	highlighted_cells = []
-
-func _on_unit_was_selected(unit):
-	if unit.is_in_group("Unit"):
-		highlight_unit_move_cells(unit)
-
-func _on_unit_was_unselected(_unit):
-	unhilight_cells(highlighted_cells)
-	highlighted_cells = []
-
-func _on_unit_want_to_move(unit, target_global_position):
-	var target_cell = global_to_map(target_global_position)
-	if target_cell in highlighted_cells:
-		var unit_cell = local_to_map(unit.position)
-		_set_interactable_cell(unit_cell, null)
-		_set_interactable_cell(target_cell, unit)
-		unit.move_to(map_to_global(target_cell))
-	unit.unselect()
-
-func _on_unit_hover_started(unit):
-	if unit.is_in_group("Enemy") and GameState.is_unit_selected:
-		var selected_unit = GameState.selected_unit
-		if selected_unit.is_in_group("Unit"):
-			unhilight_cells(highlighted_cells)
-			highlighted_cells = []
-			highlight_unit_attack_cells(selected_unit)
-
-func _on_unit_hover_ended(unit):
-	if unit.is_in_group("Enemy") and GameState.is_unit_selected:
-		var selected_unit = GameState.selected_unit
-		if selected_unit.is_in_group("Unit"):
-			unhilight_cells(highlighted_cells)
-			highlighted_cells = []
-			highlight_unit_move_cells(selected_unit)
-
-func _on_child_entered_tree(child):
-	var child_cell = local_to_map(child.position)
-	_set_interactable_cell(child_cell, child)
-	child.connect("was_selected", _on_unit_was_selected)
-	child.connect("was_deselected", _on_unit_was_unselected)
-	child.connect("want_to_move", _on_unit_want_to_move)
+	unhilight_cells(interactable_cells)

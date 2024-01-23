@@ -13,7 +13,7 @@ shader_parameter/new_main_color = null
 shader_parameter/new_shadow_color = null
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_82fs8"]
-size = Vector2(48, 48)
+size = Vector2(64, 64)
 
 [sub_resource type="Animation" id="Animation_bl8tv"]
 resource_name = "Idle"
@@ -72,6 +72,7 @@ _data = {
 }
 
 [node name="Unit" type="Node2D" groups=["Unit"]]
+position = Vector2(2.08165e-12, -16)
 script = ExtResource("1_hxa3n")
 
 [node name="SelectedEffect" parent="." instance=ExtResource("2_m7i68")]
@@ -80,7 +81,6 @@ position = Vector2(0, 8)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_bqc42")
-position = Vector2(0, -8)
 texture = ExtResource("3_x1s6x")
 hframes = 6
 vframes = 6
@@ -88,7 +88,6 @@ vframes = 6
 [node name="SelectionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SelectionArea"]
-position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_82fs8")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -98,5 +97,6 @@ libraries = {
 autoplay = "Idle"
 
 [node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(0, 1)
 
 [connection signal="input_event" from="SelectionArea" to="." method="_on_selection_area_input_event"]

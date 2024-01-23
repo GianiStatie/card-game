@@ -1,10 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://blik5to2oho03"]
+[gd_scene load_steps=15 format=3 uid="uid://blik5to2oho03"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_7hgu7"]
 [ext_resource type="Script" path="res://CardContainer.gd" id="1_evodb"]
 [ext_resource type="Texture2D" uid="uid://bu4yqjwck8txe" path="res://assets/board/Tilemap_Elevation.png" id="1_vklg5"]
 [ext_resource type="Texture2D" uid="uid://kgmmuo8cimhw" path="res://assets/board/Tilemap_Flat.png" id="2_1p78n"]
 [ext_resource type="Script" path="res://Map.gd" id="2_sy7r7"]
+[ext_resource type="Script" path="res://src/units/UnitManager.gd" id="2_wmuw3"]
 [ext_resource type="Texture2D" uid="uid://bywuvi6mtw3mj" path="res://assets/board/shadow_64x64.png" id="3_n7xqg"]
 [ext_resource type="PackedScene" uid="uid://cdoewpbifo40y" path="res://src/units/enemy.tscn" id="6_87ddg"]
 [ext_resource type="PackedScene" uid="uid://di77xpueiuvjv" path="res://src/effect/UnitPlaceEffect.tscn" id="6_gksfp"]
@@ -314,8 +315,12 @@ layer_2/name = "Effects"
 layer_2/tile_data = PackedInt32Array()
 script = ExtResource("2_sy7r7")
 
-[node name="Enemy" parent="Map" instance=ExtResource("6_87ddg")]
-position = Vector2(352, 152)
+[node name="UnitManager" type="Node2D" parent="." node_paths=PackedStringArray("map")]
+script = ExtResource("2_wmuw3")
+map = NodePath("../Map")
+
+[node name="Enemy" parent="UnitManager" instance=ExtResource("6_87ddg")]
+position = Vector2(544, 256)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -356,7 +361,6 @@ grow_vertical = 0
 text = "Draw Card"
 
 [connection signal="card_was_picked_up" from="CanvasLayer/CardContainer" to="." method="_on_card_container_card_was_picked_up"]
-[connection signal="card_was_picked_up" from="CanvasLayer/CardContainer" to="Map" method="_on_card_container_card_was_picked_up"]
 [connection signal="card_was_released" from="CanvasLayer/CardContainer" to="." method="_on_card_container_card_was_released"]
-[connection signal="card_was_released" from="CanvasLayer/CardContainer" to="Map" method="_on_card_container_card_was_released"]
+[connection signal="card_was_released" from="CanvasLayer/CardContainer" to="UnitManager" method="_on_card_container_card_was_released"]
 [connection signal="pressed" from="CanvasLayer/Button" to="CanvasLayer/CardContainer" method="_on_button_pressed"]
