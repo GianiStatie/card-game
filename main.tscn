@@ -320,7 +320,7 @@ script = ExtResource("2_wmuw3")
 map = NodePath("../Map")
 
 [node name="Enemy" parent="UnitManager" instance=ExtResource("6_87ddg")]
-position = Vector2(544, 256)
+position = Vector2(608, 256)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

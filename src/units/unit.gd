@@ -28,11 +28,16 @@ var attack_directions = [
 
 func _ready():
 	var source_color = Constants.DEFAULT_PALETTE
-	var target_color = Constants.PALETTS["purple"]
+	var target_color = Constants.PALETTS["blue"]
+	
 	sprite.material.set_shader_parameter("old_main_color", source_color["old_main_color"])
-	sprite.material.set_shader_parameter("old_shadow_color", source_color["old_shadow_color"])
 	sprite.material.set_shader_parameter("new_main_color", target_color["new_main_color"])
+	
+	sprite.material.set_shader_parameter("old_shadow_color", source_color["old_shadow_color"])
 	sprite.material.set_shader_parameter("new_shadow_color", target_color["new_shadow_color"])
+	
+	sprite.material.set_shader_parameter("old_light_color", source_color["old_light_color"])
+	sprite.material.set_shader_parameter("new_light_color", target_color["new_light_color"])
 
 
 func _input(event):

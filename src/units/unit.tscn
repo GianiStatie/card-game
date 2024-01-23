@@ -7,13 +7,45 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bqc42"]
 shader = ExtResource("3_ob0dq")
-shader_parameter/old_main_color = null
+shader_parameter/old_main_color = Color(0.129412, 0.513726, 0.6, 1)
 shader_parameter/old_shadow_color = null
-shader_parameter/new_main_color = null
+shader_parameter/old_light_color = null
+shader_parameter/new_main_color = Color(1, 0, 0, 1)
 shader_parameter/new_shadow_color = null
+shader_parameter/new_light_color = null
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_82fs8"]
 size = Vector2(64, 64)
+
+[sub_resource type="Animation" id="Animation_30p0q"]
+resource_name = "Attack"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [12, 13, 14, 15, 16, 17]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_on_animation_player_Attack_finished"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_bl8tv"]
 resource_name = "Idle"
@@ -62,36 +94,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [0]
-}
-
-[sub_resource type="Animation" id="Animation_30p0q"]
-resource_name = "Attack"
-length = 0.6
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [12, 13, 14, 15, 16, 17]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.6),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"_on_animation_player_Attack_finished"
-}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_vmnk4"]

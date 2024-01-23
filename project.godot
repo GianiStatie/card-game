@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 GameState="*res://src/preloads/GameState.gd"
 BetterTerrain="*res://addons/better-terrain/BetterTerrain.gd"
 Constants="*res://src/preloads/Constants.gd"
+Utils="*res://src/preloads/Utils.gd"
 
 [display]
 

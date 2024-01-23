@@ -1,7 +1,21 @@
-[gd_scene load_steps=7 format=3 uid="uid://cdoewpbifo40y"]
+[gd_scene load_steps=9 format=3 uid="uid://cdoewpbifo40y"]
 
 [ext_resource type="Texture2D" uid="uid://cxjp1e0dn0w0n" path="res://assets/units/Torch_Blue.png" id="1_uxhu7"]
 [ext_resource type="Script" path="res://src/units/enemy.gd" id="1_ywv4m"]
+[ext_resource type="Shader" path="res://src/shaders/color_swap.gdshader" id="2_7la8d"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wa20s"]
+resource_local_to_scene = true
+shader = ExtResource("2_7la8d")
+shader_parameter/old_main_color = null
+shader_parameter/old_shadow_color = Color(0.219608, 0.270588, 0.415686, 1)
+shader_parameter/old_light_color = Color(0.313726, 0.666667, 0.635294, 1)
+shader_parameter/new_main_color = null
+shader_parameter/new_shadow_color = Color(1, 0, 0, 1)
+shader_parameter/new_light_color = Color(1, 0.670588, 1, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wo8px"]
+size = Vector2(64, 64)
 
 [sub_resource type="Animation" id="Animation_ng24x"]
 resource_name = "Idle"
@@ -34,6 +48,30 @@ tracks/0/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [3.48787e-16]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_snc23"]
 _data = {
@@ -41,29 +79,27 @@ _data = {
 "RESET": SubResource("Animation_t2tkt")
 }
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wo8px"]
-size = Vector2(64, 64)
-
 [node name="Enemy" type="Node2D" groups=["Enemy"]]
 script = ExtResource("1_ywv4m")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_wa20s")
 position = Vector2(2.08165e-12, -8)
 texture = ExtResource("1_uxhu7")
 hframes = 7
 vframes = 5
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_snc23")
-}
-autoplay = "Idle"
 
 [node name="SelectionArea" type="Area2D" parent="."]
 position = Vector2(2.08165e-12, -8)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SelectionArea"]
 shape = SubResource("RectangleShape2D_wo8px")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_snc23")
+}
+autoplay = "Idle"
 
 [connection signal="mouse_entered" from="SelectionArea" to="." method="_on_selection_area_mouse_entered"]
 [connection signal="mouse_exited" from="SelectionArea" to="." method="_on_selection_area_mouse_exited"]

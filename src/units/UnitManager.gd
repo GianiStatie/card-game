@@ -12,6 +12,7 @@ func _ready():
 	for child in get_children():
 		var child_cell = map.global_to_map(child.global_position)
 		set_cell_occupied(child_cell, child)
+		child.connect("has_died", _on_unit_has_died)
 	
 	connect("child_entered_tree", _on_child_entered_tree)
 
@@ -66,8 +67,14 @@ func _on_unit_interact_with(unit, target_global_position):
 			set_cell_occupied(target_cell, unit)
 			unit.move_to(map.map_to_global(target_cell))
 		elif action_type == "attack":
+			var target_unit = get_unit_at_cell(target_cell)
 			unit.attack_at(target_global_position)
+			target_unit.is_attacked()
 	unit.unselect()
+
+func _on_unit_has_died(unit_global_position):
+	var unit_cell = map.global_to_map(unit_global_position)
+	set_cell_free(unit_cell)
 
 func _on_child_entered_tree(child):
 	var child_cell = map.global_to_map(child.global_position)
