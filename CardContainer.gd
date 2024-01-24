@@ -24,7 +24,7 @@ func _quadratic_bezier(p0: Vector2, p1: Vector2, p2: Vector2, t: float):
 	var r = q0.lerp(q1, t)
 	return r
 
-func _on_button_pressed():
+func draw_card():
 	var card = CardScene.instantiate()
 	add_child(card)
 	card.connect("card_was_picked_up", _on_Card_was_picked_up)
@@ -98,3 +98,6 @@ func _set_card_overlap(value):
 
 func _get_card_overlap():
 	return card_overlap
+
+func _on_draw_card_button_pressed():
+	draw_card()

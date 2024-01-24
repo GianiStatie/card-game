@@ -1,14 +1,16 @@
-[gd_scene load_steps=14 format=3 uid="uid://blik5to2oho03"]
+[gd_scene load_steps=16 format=3 uid="uid://blik5to2oho03"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_7hgu7"]
 [ext_resource type="Script" path="res://CardContainer.gd" id="1_evodb"]
 [ext_resource type="Texture2D" uid="uid://bu4yqjwck8txe" path="res://assets/board/Tilemap_Elevation.png" id="1_vklg5"]
 [ext_resource type="Texture2D" uid="uid://kgmmuo8cimhw" path="res://assets/board/Tilemap_Flat.png" id="2_1p78n"]
 [ext_resource type="Script" path="res://Map.gd" id="2_sy7r7"]
-[ext_resource type="Script" path="res://src/units/UnitManager.gd" id="2_wmuw3"]
+[ext_resource type="Script" path="res://src/managers/UnitManager.gd" id="2_wmuw3"]
 [ext_resource type="Texture2D" uid="uid://bywuvi6mtw3mj" path="res://assets/board/shadow_64x64.png" id="3_n7xqg"]
 [ext_resource type="PackedScene" uid="uid://di77xpueiuvjv" path="res://src/effect/UnitPlaceEffect.tscn" id="6_gksfp"]
+[ext_resource type="Script" path="res://src/managers/AllyManager.gd" id="7_cpld3"]
 [ext_resource type="PackedScene" uid="uid://c885nsyjipnty" path="res://src/effect/SelectedEffect.tscn" id="7_qvcjj"]
+[ext_resource type="Script" path="res://src/managers/EnemyManager.gd" id="8_nbs2d"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_labw1"]
 texture = ExtResource("2_1p78n")
@@ -301,7 +303,6 @@ metadata/_better_terrain = {
 }
 
 [node name="Main" type="Node2D"]
-y_sort_enabled = true
 script = ExtResource("1_7hgu7")
 
 [node name="Map" type="TileMap" parent="."]
@@ -319,6 +320,12 @@ script = ExtResource("2_sy7r7")
 y_sort_enabled = true
 script = ExtResource("2_wmuw3")
 map = NodePath("../Map")
+
+[node name="AllyManager" type="Node2D" parent="UnitManager"]
+script = ExtResource("7_cpld3")
+
+[node name="EnemyManager" type="Node2D" parent="UnitManager"]
+script = ExtResource("8_nbs2d")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -344,22 +351,41 @@ grow_vertical = 0
 rotation = -0.000502201
 script = ExtResource("1_evodb")
 
-[node name="Button" type="Button" parent="CanvasLayer"]
-anchors_preset = 3
+[node name="EndTurnButton" type="Button" parent="CanvasLayer"]
+anchors_preset = 6
 anchor_left = 1.0
-anchor_top = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -121.0
-offset_top = -56.0
-offset_right = -31.0
-offset_bottom = -25.0
+anchor_bottom = 0.5
+offset_left = -112.0
+offset_top = -20.0
+offset_right = -22.0
+offset_bottom = 11.0
 grow_horizontal = 0
-grow_vertical = 0
+grow_vertical = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+text = "End Turn"
+
+[node name="DrawCardButton" type="Button" parent="CanvasLayer"]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -112.0
+offset_top = 172.0
+offset_right = -22.0
+offset_bottom = 203.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
 text = "Draw Card"
 
+[connection signal="card_was_picked_up" from="CanvasLayer/CardContainer" to="UnitManager/AllyManager" method="_on_card_container_card_was_picked_up"]
 [connection signal="card_was_picked_up" from="CanvasLayer/CardContainer" to="." method="_on_card_container_card_was_picked_up"]
-[connection signal="card_was_picked_up" from="CanvasLayer/CardContainer" to="UnitManager" method="_on_card_container_card_was_picked_up"]
+[connection signal="card_was_released" from="CanvasLayer/CardContainer" to="UnitManager/AllyManager" method="_on_card_container_card_was_released"]
 [connection signal="card_was_released" from="CanvasLayer/CardContainer" to="." method="_on_card_container_card_was_released"]
-[connection signal="card_was_released" from="CanvasLayer/CardContainer" to="UnitManager" method="_on_card_container_card_was_released"]
-[connection signal="pressed" from="CanvasLayer/Button" to="CanvasLayer/CardContainer" method="_on_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/EndTurnButton" to="UnitManager" method="_on_end_turn_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/DrawCardButton" to="CanvasLayer/CardContainer" method="_on_draw_card_button_pressed"]
