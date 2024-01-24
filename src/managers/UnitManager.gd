@@ -16,7 +16,7 @@ var init_ally_units = [
 
 var init_enemy_units = [
 	{
-		"object": "res://src/units/enemy.tscn",
+		"object": "res://src/units/unit.tscn",
 		"map_position": Vector2i(3, 1)
 	}
 ]
@@ -43,6 +43,17 @@ func get_unit_at_cell(cell):
 	var fetched_cell = occupied_cells.get(str(cell), {})
 	return fetched_cell.get("object", null)
 
+func get_closest_ally_unit(cell):
+	var min_distance = INF
+	var closest_ally = null
+	for ally in ally_manager.get_children():
+		var ally_cell = map.global_to_map(ally.global_position)
+		var distance = (cell - ally_cell).length_squared()
+		if distance < min_distance:
+			closest_ally = ally
+			min_distance = distance
+	return closest_ally
+
 func is_occupied_cell(cell):
 	return get_unit_at_cell(cell) != null
 
@@ -52,3 +63,4 @@ func _on_unit_has_died(unit_global_position):
 
 func _on_end_turn_button_pressed():
 	GameState.is_enemy_turn = true
+	enemy_manager.start_turn()

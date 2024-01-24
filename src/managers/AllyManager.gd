@@ -1,5 +1,6 @@
 extends Node2D
 
+# TODO: Store unit info on card
 const UnitScene = preload("res://src/units/unit.tscn")
 
 var map: TileMap = null
@@ -40,11 +41,13 @@ func _on_unit_interact_with(unit, target_global_position):
 	unit.unselect()
 
 func _on_child_entered_tree(child):
+	child.unit_aggresion = "Ally"
 	var child_cell = map.global_to_map(child.global_position)
 	parent.set_cell_occupied(child_cell, child)
 	child.connect("was_selected", _on_unit_was_selected)
 	child.connect("was_deselected", _on_unit_was_unselected)
 	child.connect("interact_with", _on_unit_interact_with)
+	child.connect("has_died", parent._on_unit_has_died)
 
 func _on_card_container_card_was_picked_up(_card):
 	var ally_placement_cells = get_ally_placement_cells()

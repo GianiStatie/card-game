@@ -383,9 +383,9 @@ size_flags_horizontal = 8
 size_flags_vertical = 4
 text = "Draw Card"
 
-[connection signal="card_was_picked_up" from="CanvasLayer/CardContainer" to="UnitManager/AllyManager" method="_on_card_container_card_was_picked_up"]
 [connection signal="card_was_picked_up" from="CanvasLayer/CardContainer" to="." method="_on_card_container_card_was_picked_up"]
-[connection signal="card_was_released" from="CanvasLayer/CardContainer" to="UnitManager/AllyManager" method="_on_card_container_card_was_released"]
+[connection signal="card_was_picked_up" from="CanvasLayer/CardContainer" to="UnitManager/AllyManager" method="_on_card_container_card_was_picked_up"]
 [connection signal="card_was_released" from="CanvasLayer/CardContainer" to="." method="_on_card_container_card_was_released"]
+[connection signal="card_was_released" from="CanvasLayer/CardContainer" to="UnitManager/AllyManager" method="_on_card_container_card_was_released"]
 [connection signal="pressed" from="CanvasLayer/EndTurnButton" to="UnitManager" method="_on_end_turn_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/DrawCardButton" to="CanvasLayer/CardContainer" method="_on_draw_card_button_pressed"]

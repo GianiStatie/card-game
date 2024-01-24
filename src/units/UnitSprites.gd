@@ -33,6 +33,14 @@ func update_palettes():
 	body_sprite.material.set_shader_parameter("old_light_color", body_source_color["old_light_color"])
 	body_sprite.material.set_shader_parameter("new_light_color", body_target_color["new_light_color"])
 
-func update_color(color):
-	body_target_color = Constants.PALETTS[color]
+func update_color(unit_aggresion):
+	match unit_aggresion:
+		"Ally":
+			body_target_color = Constants.PALETTS["blue"]
+		"Enemy":
+			body_target_color = Constants.PALETTS["red"]
+		"Neutral":
+			body_target_color = Constants.PALETTS["yellow"]
+		"Mercenary":
+			body_target_color = Constants.PALETTS["purple"]
 	update_palettes()

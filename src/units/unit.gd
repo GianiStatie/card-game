@@ -1,7 +1,9 @@
 extends Node2D
 
+const DeathEffectScene = preload("res://src/effect/DeathEffect.tscn")
+
 @export_enum("pawn", "king") var unit_type: String = "pawn"
-@export_enum("blue", "red", "yellow", "purple") var unit_aggresion: String = "blue"
+@export_enum("Ally", "Enemy", "Neutral", "Mercenary") var unit_aggresion: String = "Ally": set = _on_set_unit_aggresion
 
 @onready var selected_effect = $SelectedEffect
 @onready var animation_player = $AnimationPlayer
@@ -13,6 +15,7 @@ var target_position = Vector2.ZERO
 signal was_selected(unit)
 signal was_deselected(unit)
 signal interact_with(unit, target_global_position)
+signal has_died(unit_global_position)
 
 var move_directions = []
 var attack_directions = []
@@ -62,6 +65,11 @@ func attack_at(target_global_position):
 	look_towards(target_global_position)
 	animation_player.play("Attack")
 
+func is_attacked():
+	Utils.instance_scene_on_main(DeathEffectScene, global_position)
+	emit_signal("has_died", global_position)
+	queue_free()
+
 func _on_animation_player_Attack_finished():
 	animation_player.play("Idle")
 
@@ -75,6 +83,9 @@ func _on_selection_area_input_event(_viewport, event, _shape_idx):
 		selected_effect.visible = true
 		emit_signal("was_selected", self)
 
+func _on_set_unit_aggresion(value):
+	unit_aggresion = value
+
 func send_move_event_intent(target_global_position):
 	emit_signal("interact_with", self, target_global_position)
 
@@ -85,12 +96,4 @@ func unselect():
 	emit_signal("was_deselected", self)
 
 func update_unit_groups():
-	match unit_aggresion:
-		"blue":
-			add_to_group("Ally")
-		"red":
-			add_to_group("Enemy")
-		"yellow":
-			add_to_group("Vendor")
-		"purple":
-			add_to_group("Mercenary")
+	add_to_group(unit_aggresion)
