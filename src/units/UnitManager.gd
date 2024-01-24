@@ -6,14 +6,45 @@ const UnitScene = preload("res://src/units/unit.tscn")
 
 var occupied_cells = {}
 
+var init_ally_units = [
+	{
+		"object": "res://src/units/unit.tscn",
+		"type": "king",
+		"map_position": Vector2i(0, 2)
+	}
+]
+
+var init_enemy_units = [
+	{
+		"object": "res://src/units/enemy.tscn",
+		"map_position": Vector2i(3, 1)
+	}
+]
+
+var ally_placement_cells = []
 
 func _ready():
+	for unit_info in init_ally_units:
+		var unit = load(unit_info["object"]).instantiate()
+		unit.unit_type = unit_info["type"]
+		add_child(unit)
+		unit.global_position = map.map_to_global(unit_info["map_position"])
+		unit.connect("was_selected", _on_unit_was_selected)
+		unit.connect("was_deselected", _on_unit_was_unselected)
+		unit.connect("interact_with", _on_unit_interact_with)
+	
+	for unit_info in init_enemy_units:
+		var unit = load(unit_info["object"]).instantiate()
+		add_child(unit)
+		unit.global_position = map.map_to_global(unit_info["map_position"])
+		unit.connect("has_died", _on_unit_has_died)
+	
 	# set occupied cells
 	for child in get_children():
 		var child_cell = map.global_to_map(child.global_position)
 		set_cell_occupied(child_cell, child)
-		child.connect("has_died", _on_unit_has_died)
 	
+	update_ally_placement_cells()
 	connect("child_entered_tree", _on_child_entered_tree)
 
 func set_cell_occupied(cell, object):
@@ -28,6 +59,16 @@ func get_unit_at_cell(cell):
 
 func is_occupied_cell(cell):
 	return get_unit_at_cell(cell) != null
+
+func update_ally_placement_cells():
+	for child in get_children():
+		if not child.is_in_group("Unit"):
+			continue
+		var child_cell = map.global_to_map(child.global_position)
+		for cell in map.get_surrounding_cells_around(child_cell):
+			if map.is_valid_cell(cell) and not is_occupied_cell(cell):
+				if cell not in ally_placement_cells:
+					ally_placement_cells.append(cell)
 
 func highlight_unit_move_cells(unit):
 	var to_be_highlighted = []
@@ -82,12 +123,17 @@ func _on_child_entered_tree(child):
 	child.connect("was_selected", _on_unit_was_selected)
 	child.connect("was_deselected", _on_unit_was_unselected)
 	child.connect("interact_with", _on_unit_interact_with)
+	update_ally_placement_cells()
+
+func _on_card_container_card_was_picked_up(_card):
+	map.highlight_cells(ally_placement_cells, "move")
 
 func _on_card_container_card_was_released(card):
+	map.unhilight_all_cells()
+	
 	var mouse_global_position = get_global_mouse_position()
 	var mouse_hovered_cell = map.global_to_map(mouse_global_position)
-	var is_valid_placement = map.is_valid_cell(mouse_hovered_cell)
-	if not is_valid_placement:
+	if not map.is_valid_cell(mouse_hovered_cell):
 		return
 	
 	var hovered_cell_global_position = map.map_to_global(mouse_hovered_cell)

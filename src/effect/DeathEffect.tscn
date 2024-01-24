@@ -110,7 +110,7 @@ animations = [{
 }]
 
 [node name="DeathEffect" type="AnimatedSprite2D"]
-position = Vector2(2.08165e-12, -16)
+position = Vector2(0, -32)
 sprite_frames = SubResource("SpriteFrames_1uxmd")
 autoplay = "default"
 frame = 13

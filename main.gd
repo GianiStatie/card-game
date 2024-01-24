@@ -6,6 +6,7 @@ extends Node2D
 @onready var arrow_effect = $CanvasLayer/UnitPlaceEffect
 @onready var select_effect = $CanvasLayer/SelectedEffect
 
+
 func _input(event):
 	if event is InputEventMouse:
 		if GameState.is_holding_card:
@@ -18,8 +19,9 @@ func _input(event):
 func _show_selected_cell(mouse_hovered_cell):
 	var is_valid_cell = map.is_valid_cell(mouse_hovered_cell)
 	var is_occupied_cell = unit_manager.is_occupied_cell(mouse_hovered_cell)
+	var is_higlighted_cell = map.is_highlighted_cell(mouse_hovered_cell)
 	
-	if is_valid_cell and not is_occupied_cell:
+	if is_valid_cell and not is_occupied_cell and is_higlighted_cell:
 		var hovered_cell_global_position = map.map_to_global(mouse_hovered_cell)
 		select_effect.update(hovered_cell_global_position)
 		select_effect.visible = true

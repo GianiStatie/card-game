@@ -72,3 +72,9 @@ func unhilight_all_cells():
 func get_highlight_type(cell):
 	var action_index = get_cell_alternative_tile(effects_layer, cell)
 	return highlight_colors.keys()[action_index]
+
+func get_surrounding_cells_around(cell):
+	var surrounding_cells = get_surrounding_cells(cell)
+	for direction in [Vector2i(-1, -1), Vector2i(-1, 1), Vector2i(1, -1), Vector2i(1, 1)]:
+		surrounding_cells.append(cell + direction)
+	return surrounding_cells
