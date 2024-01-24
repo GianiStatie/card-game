@@ -18,6 +18,10 @@ var init_enemy_units = [
 	{
 		"object": "res://src/units/unit.tscn",
 		"map_position": Vector2i(3, 1)
+	},
+	{
+		"object": "res://src/units/unit.tscn",
+		"map_position": Vector2i(3, 2)
 	}
 ]
 
@@ -43,16 +47,22 @@ func get_unit_at_cell(cell):
 	var fetched_cell = occupied_cells.get(str(cell), {})
 	return fetched_cell.get("object", null)
 
-func get_closest_ally_unit(cell):
-	var min_distance = INF
-	var closest_ally = null
+func get_ally_units_overlapping_cells(cells):
+	var ally_units = []
+	var ally_cells = []
 	for ally in ally_manager.get_children():
 		var ally_cell = map.global_to_map(ally.global_position)
-		var distance = (cell - ally_cell).length_squared()
-		if distance < min_distance:
-			closest_ally = ally
-			min_distance = distance
-	return closest_ally
+		if ally_cell in cells:
+			ally_units.append(ally)
+			ally_cells.append(ally_cell)
+	return {"ally_units": ally_units, "ally_cells": ally_cells}
+
+func get_ally_distances_to_cell(cell):
+	var ally_distances = []
+	for ally in ally_manager.get_children():
+		var ally_cell = map.global_to_map(ally.global_position)
+		ally_distances.append((cell-ally_cell).length_squared())
+	return ally_distances
 
 func is_occupied_cell(cell):
 	return get_unit_at_cell(cell) != null

@@ -17,17 +17,16 @@ func init_units(init_enemy_units):
 func start_turn():
 	for child in get_children():
 		var child_cell = map.global_to_map(child.global_position)
-		var closest_target = parent.get_closest_ally_unit(child_cell)
-		var closest_target_cell = map.global_to_map(closest_target.global_position)
-		
 		var attack_cells = get_attack_cells(child, child_cell)
-		if closest_target_cell in attack_cells:
-			var target_global_position = map.map_to_global(closest_target_cell)
-			child.attack_at(target_global_position)
-			closest_target.is_attacked()
+		var tragets_in_attack_range = parent.get_ally_units_overlapping_cells(attack_cells)
+		
+		if len(tragets_in_attack_range["ally_units"]) > 0:
+			var closest_unit_cell = get_closest_cell_to_target_cell(tragets_in_attack_range["ally_cells"], child_cell)
+			var target_unit = parent.get_unit_at_cell(closest_unit_cell)
+			child.attack_at(target_unit.global_position)
+			target_unit.is_attacked()
 		else:
-			var movable_directions = get_movable_directions(child)
-			var best_direction = get_direction_to_attack_target_cell(attack_cells, movable_directions, closest_target_cell)
+			var best_direction = get_direction_to_attack_target_cell(child, attack_cells)
 			var target_cell = child_cell + best_direction
 			parent.set_cell_free(child_cell)
 			parent.set_cell_occupied(target_cell, child)
@@ -55,13 +54,28 @@ func get_closest_cell_to_target_cell(cells, target_cell):
 			min_distance = distance
 	return closest_cell
 
-func get_direction_to_attack_target_cell(attack_cells, directions, target_cell):
-	var closest_attack_cell = get_closest_cell_to_target_cell(attack_cells, target_cell)
-	var post_move_attack = []
-	for direction in directions:
-		post_move_attack.append(closest_attack_cell + direction)
-	var closest_post_move_attack = get_closest_cell_to_target_cell(post_move_attack, target_cell)
-	return closest_post_move_attack - closest_attack_cell
+func get_direction_to_attack_target_cell(unit, attack_cells):
+	var min_distance = INF
+	var best_direction = null
+	var seen_cells = []
+	
+	var movable_directions = get_movable_directions(unit)
+	
+	for attack_cell in attack_cells:
+		for move_direction in movable_directions:
+			var target_cell = attack_cell + move_direction
+			
+			if target_cell in seen_cells:
+				continue
+			seen_cells.append(target_cell)
+			
+			var distances_to_targets = parent.get_ally_distances_to_cell(target_cell)
+			var min_distance_to_targets = distances_to_targets.min()
+			if min_distance_to_targets < min_distance:
+				best_direction = move_direction
+				min_distance = min_distance_to_targets
+	
+	return best_direction
 
 func get_movable_directions(unit):
 	var movable_directions = []
