@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://cwkbaod5rtlft" path="res://assets/units/components/RightArm/RightArm.png" id="8_ouflu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ba5id"]
+resource_local_to_scene = true
 shader = ExtResource("3_ob0dq")
 shader_parameter/old_main_color = null
 shader_parameter/old_shadow_color = null
@@ -252,7 +253,7 @@ _data = {
 "RESET": SubResource("Animation_ai4nu")
 }
 
-[node name="Unit" type="Node2D" groups=["Unit"]]
+[node name="Unit" type="Node2D"]
 script = ExtResource("1_hxa3n")
 
 [node name="SelectedEffect" parent="." instance=ExtResource("2_m7i68")]

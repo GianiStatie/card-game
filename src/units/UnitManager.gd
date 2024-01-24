@@ -62,7 +62,7 @@ func is_occupied_cell(cell):
 
 func update_ally_placement_cells():
 	for child in get_children():
-		if not child.is_in_group("Unit"):
+		if not child.is_in_group("Ally"):
 			continue
 		var child_cell = map.global_to_map(child.global_position)
 		for cell in map.get_surrounding_cells_around(child_cell):
@@ -91,7 +91,7 @@ func highlight_unit_attack_cells(unit):
 	map.highlight_cells(to_be_highlighted, "attack")
 
 func _on_unit_was_selected(unit):
-	if unit.is_in_group("Unit"):
+	if unit.is_in_group("Ally"):
 		highlight_unit_move_cells(unit)
 		highlight_unit_attack_cells(unit)
 

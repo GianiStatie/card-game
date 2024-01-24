@@ -8,8 +8,6 @@ extends Node2D
 var body_source_color = Constants.DEFAULT_PALETTE
 var body_target_color = Constants.PALETTS["blue"]
 
-func _ready():
-	update_palettes()
 
 func update_sprites(sprite_info):
 	for key in sprite_info:
@@ -24,7 +22,6 @@ func update_sprites(sprite_info):
 				right_arm_sprite.texture = load(sprite_info[key])
 			_:
 				print("Unknown key: %s"%key)
-	update_palettes()
 
 func update_palettes():
 	body_sprite.material.set_shader_parameter("old_main_color", body_source_color["old_main_color"])
@@ -35,3 +32,7 @@ func update_palettes():
 	
 	body_sprite.material.set_shader_parameter("old_light_color", body_source_color["old_light_color"])
 	body_sprite.material.set_shader_parameter("new_light_color", body_target_color["new_light_color"])
+
+func update_color(color):
+	body_target_color = Constants.PALETTS[color]
+	update_palettes()

@@ -1,6 +1,7 @@
 extends Node2D
 
 @export_enum("pawn", "king") var unit_type: String = "pawn"
+@export_enum("blue", "red", "yellow", "purple") var unit_aggresion: String = "blue"
 
 @onready var selected_effect = $SelectedEffect
 @onready var animation_player = $AnimationPlayer
@@ -21,6 +22,8 @@ func _ready():
 	move_directions = unit_info["move_directions"]
 	attack_directions = unit_info["attack_directions"]
 	sprites.update_sprites(unit_info["sprites"])
+	sprites.update_color(unit_aggresion)
+	update_unit_groups()
 
 func _input(event):
 	if event.is_action_pressed("LeftMouseClick"):
@@ -63,6 +66,9 @@ func _on_animation_player_Attack_finished():
 	animation_player.play("Idle")
 
 func _on_selection_area_input_event(_viewport, event, _shape_idx):
+	if is_in_group("Enemy"):
+		return
+	
 	if event.is_action_pressed("LeftMouseClick"):
 		GameState.is_unit_selected = true
 		GameState.selected_unit = self
@@ -77,3 +83,14 @@ func unselect():
 	GameState.selected_unit = null
 	selected_effect.visible = false
 	emit_signal("was_deselected", self)
+
+func update_unit_groups():
+	match unit_aggresion:
+		"blue":
+			add_to_group("Ally")
+		"red":
+			add_to_group("Enemy")
+		"yellow":
+			add_to_group("Vendor")
+		"purple":
+			add_to_group("Mercenary")
