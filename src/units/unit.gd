@@ -1,8 +1,10 @@
 extends Node2D
 
+@export_enum("pawn", "king") var unit_type: String = "pawn"
+
 @onready var selected_effect = $SelectedEffect
 @onready var animation_player = $AnimationPlayer
-@onready var sprite = $Sprite2D
+@onready var sprites = $UnitSprites
 
 var should_move = false
 var target_position = Vector2.ZERO
@@ -11,34 +13,14 @@ signal was_selected(unit)
 signal was_deselected(unit)
 signal interact_with(unit, target_global_position)
 
-var move_directions = [
-	Vector2i.UP,
-	Vector2i.DOWN,
-	Vector2i.LEFT,
-	Vector2i.RIGHT,
-]
-
-var attack_directions = [
-	Vector2i(1, 1),
-	Vector2i(-1, 1),
-	Vector2i(-1, -1),
-	Vector2i(1, -1),
-]
-
+var move_directions = []
+var attack_directions = []
 
 func _ready():
-	var source_color = Constants.DEFAULT_PALETTE
-	var target_color = Constants.PALETTS["blue"]
-	
-	sprite.material.set_shader_parameter("old_main_color", source_color["old_main_color"])
-	sprite.material.set_shader_parameter("new_main_color", target_color["new_main_color"])
-	
-	sprite.material.set_shader_parameter("old_shadow_color", source_color["old_shadow_color"])
-	sprite.material.set_shader_parameter("new_shadow_color", target_color["new_shadow_color"])
-	
-	sprite.material.set_shader_parameter("old_light_color", source_color["old_light_color"])
-	sprite.material.set_shader_parameter("new_light_color", target_color["new_light_color"])
-
+	var unit_info = Constants.UNTIS[unit_type]
+	move_directions = unit_info["move_directions"]
+	attack_directions = unit_info["attack_directions"]
+	sprites.update_sprites(unit_info["sprites"])
 
 func _input(event):
 	if event.is_action_pressed("LeftMouseClick"):
@@ -62,9 +44,9 @@ func _process(delta):
 func look_towards(target_global_position):
 	var direction = target_global_position - global_position
 	if direction.x < 0:
-		sprite.scale.x = -1
+		sprites.scale.x = -1
 	else:
-		sprite.scale.x = 1
+		sprites.scale.x = 1
 
 func move_to(target_global_position):
 	target_position = target_global_position
