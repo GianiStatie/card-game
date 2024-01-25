@@ -17,11 +17,18 @@ var init_ally_units = [
 var init_enemy_units = [
 	{
 		"object": "res://src/units/unit.tscn",
-		"map_position": Vector2i(3, 1)
+		"type": "king",
+		"map_position": Vector2i(7, 2)
 	},
 	{
 		"object": "res://src/units/unit.tscn",
-		"map_position": Vector2i(3, 2)
+		"type": "pawn",
+		"map_position": Vector2i(6, 1)
+	},
+	{
+		"object": "res://src/units/unit.tscn",
+		"type": "pawn",
+		"map_position": Vector2i(6, 3)
 	}
 ]
 

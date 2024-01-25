@@ -11,6 +11,7 @@ func _ready():
 func init_units(init_enemy_units):
 	for unit_info in init_enemy_units:
 		var unit = load(unit_info["object"]).instantiate()
+		unit.unit_type = unit_info["type"]
 		unit.global_position = map.map_to_global(unit_info["map_position"])
 		add_child(unit)
 
